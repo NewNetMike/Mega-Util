@@ -1,4 +1,7 @@
 .idea/
+mega_util.egg-info/
+dist/
+build/
 *.iml
-*.txt
-*.xml
+mega_util/*.txt
+mega_util/*.xml
