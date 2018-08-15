@@ -2,7 +2,7 @@ import subprocess
 import os
 import xml.etree.ElementTree as ET
 import re
-
+import time
 
 def export_dir(email, password, directory, megacmd=None):
     def cmd(s):
@@ -24,13 +24,14 @@ def export_dir(email, password, directory, megacmd=None):
     p = password
     d = directory
 
+    os.system("mega-version")
+    print("")
+
     cmd("mega-logout")
     cmd("mega-login " + u + " " + p)
     cmd("mega-cd " + d)
     ls = cmd("mega-ls")
     files_list = [y for y in (x.strip() for x in ls.splitlines()) if y]
-    print(files_list)
-    print(len(files_list))
 
     share_links = []
     for f in files_list:
@@ -42,10 +43,14 @@ def export_dir(email, password, directory, megacmd=None):
             f.write("%s" % s)
             if s is not share_links[-1]: f.write("\n")
 
+    cmd("mega-logout")
+    cmd("mega-quit")
+    time.sleep(10)
+
 
 if __name__ == '__main__':
     u = p = d = m = None
-    with open("config.xml") as f:
+    with open("mega_util/config.xml") as f:
         e = ET.fromstringlist(["<root>", f.read(), "</root>"])
         m = e.find("megacmd").get("loc")
         u = e.find("mega").get("u")
