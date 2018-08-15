@@ -12,9 +12,10 @@ def direct_dl(megalink, savedir, chromedriverpath):
 
     if isinstance(megalink, typing.List):
         links_list = megalink
-    elif ".txt" in megalink:
-        with open(megalink) as f:
-            links_list = f.readlines()
+    elif isinstance(megalink, str):
+        if ".txt" in megalink:
+            with open(megalink) as f:
+                links_list = f.readlines()
     else:
         links_list.append(megalink)
 
