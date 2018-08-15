@@ -36,6 +36,8 @@ def direct_dl(megalink, savedir, chromedriverpath):
     params = {'cmd': 'Page.setDownloadBehavior', 'params': {'behavior': 'allow', 'downloadPath': savedir}}
     command_result = driver.execute("send_command", params)
 
+    for l in links_list:
+        print("l = " + l)
 
     for l in links_list:
         link = re.search("#.*", l).group(0)
