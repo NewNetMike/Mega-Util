@@ -4,7 +4,7 @@ import xml.etree.ElementTree as ET
 import re
 import time
 
-def export_dir(email, password, directory, megacmd=None):
+def export_dir(email, password, directory, megacmd=None, save=None):
     def cmd(s):
         print("> " + s)
         proc = subprocess.Popen(s, shell=True, env=env, stdout=subprocess.PIPE)
@@ -38,23 +38,35 @@ def export_dir(email, password, directory, megacmd=None):
         res = cmd('mega-export -a -f "' + f + '"')
         share_links.append(re.search("(?P<url>https?://[^\s]+)", res).group("url"))
 
-    with open("links.txt", "w") as f:
-        for s in share_links:
-            f.write("%s" % s)
-            if s is not share_links[-1]: f.write("\n")
+    if save is not None:
+        with open(save, "w") as f:
+            for s in share_links:
+                f.write("%s" % s)
+                if s is not share_links[-1]: f.write("\n")
 
     cmd("mega-logout")
     cmd("mega-quit")
     time.sleep(10)
+    return save
 
 
 if __name__ == '__main__':
     u = p = d = m = None
-    with open("mega_util/config.xml") as f:
-        e = ET.fromstringlist(["<root>", f.read(), "</root>"])
-        m = e.find("megacmd").get("loc")
-        u = e.find("mega").get("u")
-        p = e.find("mega").get("p")
-        d = e.find("mega").get("d")
+
+    config_path = os.path.join(os.getcwd(), "mega_config.xml")
+
+    if os.path.isfile(config_path):
+        with open(config_path) as f:
+            e = ET.fromstringlist(["<root>", f.read(), "</root>"])
+            m = e.find("megacmd").get("loc")
+            u = e.find("mega").get("u")
+            p = e.find("mega").get("p")
+            d = e.find("mega").get("d")
+    else:
+        u = input("Email: ").strip()
+        p = input("Password: ").strip()
+        d = input("Directory to export: ").strip()
+        m = input("[OPTIONAL] Path of MEGAcmd: ").strip()
+        if len(m) <= 0: m = None
 
     export_dir(u, p, d, m)
