@@ -6,3 +6,4 @@ build/
 mega_util/*.txt
 mega_util/*.xml
 *.txt
+mega_util/__pycache__/
