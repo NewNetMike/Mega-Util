@@ -47,6 +47,8 @@ def export_dir(email, password, directory, megacmd=None, save=None):
     cmd("mega-logout")
     cmd("mega-quit")
     time.sleep(10)
+
+    print(str(type(share_links)))
     return list(share_links)
 
 

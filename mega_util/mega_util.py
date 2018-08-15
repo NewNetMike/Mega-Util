@@ -3,8 +3,8 @@ import mega_util
 class MegaUtil:
     @staticmethod
     def export_directory(email, password, directory, megacmd=None, save=None):
-        mega_util.export_dir(email, password, directory, megacmd, save)
+        return mega_util.export_dir(email, password, directory, megacmd, save)
 
     @staticmethod
     def direct_download(megalink, savedir, chromedriverpath):
-        mega_util.direct_dl(megalink, savedir, chromedriverpath)
+        return mega_util.direct_dl(megalink, savedir, chromedriverpath)
