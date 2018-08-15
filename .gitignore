@@ -5,3 +5,4 @@ build/
 *.iml
 mega_util/*.txt
 mega_util/*.xml
+*.txt
