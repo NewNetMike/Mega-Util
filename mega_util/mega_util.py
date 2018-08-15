@@ -2,7 +2,7 @@ import mega_util
 
 class MegaUtil:
     @staticmethod
-    def export_directory(email, password, directory, megacmd=None):
+    def export_directory(email, password, directory, megacmd=None, save=None):
         mega_util.export_dir(email, password, directory, megacmd)
 
     @staticmethod
