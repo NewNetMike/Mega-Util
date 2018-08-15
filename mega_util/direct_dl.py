@@ -21,6 +21,9 @@ def direct_dl(megalink, savedir, chromedriverpath):
     else:
         links_list.append(megalink)
 
+    if not os.path.isabs(savedir):
+        savedir = os.path.join(os.path.dirname(__file__), savedir)
+
     if not os.path.exists(savedir):
         os.makedirs(savedir)
 
