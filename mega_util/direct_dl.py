@@ -10,7 +10,7 @@ import typing
 def direct_dl(megalink, savedir, chromedriverpath):
     links_list = []
 
-    print("megalink type is: " + type(megalink))
+    print("megalink type is: " + str(type(megalink)))
 
     if isinstance(megalink, typing.List):
         links_list = megalink
