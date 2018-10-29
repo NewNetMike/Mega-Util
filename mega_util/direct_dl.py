@@ -6,20 +6,23 @@ import xml.etree.ElementTree as ET
 import re
 import time
 import typing
+from selenium.webdriver.support.ui import WebDriverWait
+from selenium.webdriver.support import expected_conditions as EC
+from selenium.webdriver.common.by import By
 
-def direct_dl(megalink, savedir, chromedriverpath):
+def direct_dl(megalink, savedir, chromedriverpath, options=None):
     links_list = []
 
     print("megalink type is: " + str(type(megalink)))
 
-    if isinstance(megalink, typing.List):
-        links_list = megalink
-    elif isinstance(megalink, str):
+    if isinstance(megalink, str):
         if ".txt" in megalink:
             with open(megalink) as f:
                 links_list = f.readlines()
-    else:
-        links_list.append(megalink)
+        else:
+            links_list.append(megalink)
+    elif isinstance(megalink, typing.List):
+        links_list = megalink
 
     if not os.path.isabs(savedir):
         savedir = os.path.join(os.getcwd(), savedir)
@@ -28,13 +31,14 @@ def direct_dl(megalink, savedir, chromedriverpath):
     if not os.path.exists(savedir):
         os.makedirs(savedir)
 
-    options = Options()
-    options.add_argument('headless')
-    options.add_argument('window-size=1366x768')
-    options.add_argument('--disable-browser-side-navigation')
-    prefs = {'download.default_directory' : savedir,
-             "download.prompt_for_download": False}
-    options.add_experimental_option('prefs', prefs)
+    if options is None:
+        options = Options()
+        options.add_argument('headless')
+        options.add_argument('window-size=1366x768')
+        options.add_argument('--disable-browser-side-navigation')
+        prefs = {'download.default_directory' : savedir,
+                 "download.prompt_for_download": False}
+        options.add_experimental_option('prefs', prefs)
 
     driver = webdriver.Chrome(chrome_options=options, executable_path=chromedriverpath)
 
@@ -50,8 +54,12 @@ def direct_dl(megalink, savedir, chromedriverpath):
         driver.get("https://google.com")
         time.sleep(1)
         print("Downloading: [" + link + "]")
-        driver.get('https://directme.ga/' + link)
+        driver.get(l)
+        b = WebDriverWait(driver, 1000000).until(EC.presence_of_element_located((By.CSS_SELECTOR, 'div.download-file')))
+        driver.execute_script("arguments[0].click();", b)
         time.sleep(1)
+
+    time.sleep(10)
 
     done = False
     while not done:

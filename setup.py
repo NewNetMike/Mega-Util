@@ -5,7 +5,7 @@ with open("README.md", "r") as fh:
 
 setuptools.setup(
     name="mega_util",
-    version="0.0.1",
+    version="0.1.3",
     author="mycxle",
     author_email="mycxle@gmail.com",
     description="Python utility library for Mega.nz",
